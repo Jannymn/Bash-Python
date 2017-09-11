@@ -1,12 +1,9 @@
 #	这是Python对Unix系统远程连接的类包装。
-#
 #	主要使用是开源的 Paramiko 连接和执行，辅助其他模块作为添加。
-#
 #	连接初始化需要 hostname user password port
 #		e.g. Connect('10.10.10.10', 'root', '123456', '22')
 #
 #	具体方法详情请看帮助
-#
 
 import paramiko
 
@@ -35,7 +32,7 @@ class Connect:
 		self.ssh = paramiko.SSHClient()
 		self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		self.ssh.connect(self.hostname, self.port, self.user, self.password)
-		
+
 		self.transport = self.ssh.open_sftp()
 
 	def run_shell(self, shell):
