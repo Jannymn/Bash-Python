@@ -1,0 +1,47 @@
+#!/usr/bin/python
+#coding=utf-8
+import urllib
+import urllib2
+import json
+import sys
+import socket
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+def problemMessage():
+  return "##### <font color=red> Monitor message </font>"
+
+def resolvedMessage():
+  return "##### <font color=green> Monitor message </font>"
+
+def errorMessage():
+  return "##### <font color=red> %s </font>" % sys.argv[2]
+
+def sourceMessage():
+  return "##### <font color=green> %s </font>" % sys.argv[2]
+
+def redMessage():
+  return problemMessage() + '\n' + errorMessage()
+
+def greenMessage():
+  return resolvedMessage() + '\n' + sourceMessage()
+
+def sendDingDingMessage(url, data):
+  req = urllib2.Request(url)
+  req.add_header("Content-Type", "application/json; charset=utf-8")
+  opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+  response = opener.open(req, json.dumps(data))
+  return response.read()
+
+def main():
+  posturl = "https://oapi.dingtalk.com/robot/send?access_token=$dingding_token"
+  if sys.argv[1]=="red":
+    data = {"msgtype": "markdown", "markdown": {"text": redMessage(),"title": "Monitor Message"}}
+    sendDingDingMessage(posturl, data)
+  elif sys.argv[1]=="green":
+    data = {"msgtype": "markdown", "markdown": {"text": greenMessage(),"title": "Monitor Message"}}
+    sendDingDingMessage(posturl, data)
+  else:
+    exit(0)
+
+main()
